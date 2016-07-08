@@ -24,7 +24,7 @@ class BladeTest extends PHPUnit_Framework_TestCase
                 'index.php' => 'Hello <?php echo $name; ?>!',
                 'sample.blade.php' => 'Hi {{ $name }}',
                 'acme.foo.bar' => 'Hey {{ $name }}. Using foo.bar extension.',
-                'sub' => ['index.php' => 'Shared name: {{ shared }}']
+                'sub' => ['index.blade.php' => 'Shared name: {{ $shared }}']
             ]
         ));
         $path2views = vfsStream::url('blade/views');
@@ -52,5 +52,13 @@ class BladeTest extends PHPUnit_Framework_TestCase
     {
         $Template = $this->Blade->make('acme', ['name' => 'Eve']);
         $this->assertEquals('Hey Eve. Using foo.bar extension.', (string) $Template);
+    }
+
+    /** @test */
+    public function it_should_render_a_view_with_shared_data()
+    {
+        $this->Blade->share('shared', 'Acme');
+        $Template = $this->Blade->make('sub.index');
+        $this->assertEquals('Shared name: Acme', (string) $Template);
     }
 }
