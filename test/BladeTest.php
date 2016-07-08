@@ -69,4 +69,11 @@ class BladeTest extends PHPUnit_Framework_TestCase
         $Template = $Blade->make('sample', ['name' => 'Memory']);
         $this->assertEquals('Hi Memory', (string) $Template);
     }
+
+    /** @test */
+    public function it_should_allow_statically_rendering_raw_templates()
+    {
+        $Template = Blade::render('Welcome {{ $name }}', ['name' => 'Raw']);
+        $this->assertEquals('Welcome Raw', (string) $Template);
+    }
 }

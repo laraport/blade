@@ -81,4 +81,18 @@ class Blade extends Factory
     {
         return $this->engines;
     }
+
+    static public function render($template, array $data = [], array $merge = [])
+    {
+        $VfsStreamDirectory = BladeVfs::getVfsStreamDirectory(uniqid('views-'));
+
+        $fileName = uniqid('view-');
+
+        BladeVfs::addTreeStructure($VfsStreamDirectory, [
+            $fileName . '.blade.php' => $template
+        ]);
+
+        $Blade = new self(BladeVfs::getVfsPath($VfsStreamDirectory));
+        return $Blade->make($fileName, $data, $merge);
+    }
 }

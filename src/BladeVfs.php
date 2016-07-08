@@ -14,11 +14,16 @@ namespace Laraport;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamContainer;
 
 class BladeVfs
 {
-    static public function getVfsPath($path)
+    static public function getVfsStreamDirectory($path)
     {
+        if($path instanceof vfsStreamContainer)
+        {
+            return $path;
+        }
         $VfsRootDirectory = vfsStreamWrapper::getRoot();
         if(is_null($VfsRootDirectory))
         {
@@ -35,6 +40,18 @@ class BladeVfs
             $VfsBladeDirectory->addChild($VfsDirectory);
             $VfsRootDirectory->addChild($VfsBladeDirectory);
         }
-        return vfsStream::url($VfsDirectory->path());
+        return $VfsDirectory;
+    }
+
+    static public function getVfsPath($path)
+    {
+        $VfsStreamDirectory = static::getVfsStreamDirectory($path);
+        return vfsStream::url($VfsStreamDirectory->path());
+    }
+
+    static public function addTreeStructure($path, array $tree)
+    {
+        $VfsStreamDirectory = static::getVfsStreamDirectory($path);
+        vfsStream::create($tree, $VfsStreamDirectory);
     }
 }
