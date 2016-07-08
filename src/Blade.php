@@ -27,8 +27,7 @@ class Blade extends Factory
     {
         $this->extensions = [];
 
-        if(is_null($path2cache))
-        {
+        if (is_null($path2cache)) {
             $path2cache = BladeVfs::getVfsPath(uniqid('cache-'));
         }
 
@@ -49,7 +48,7 @@ class Blade extends Factory
     protected function registerPhpResolver($extensions)
     {
         $this->addExtension($extensions, 'php');
-        $this->getEngine()->register('php', function(){
+        $this->getEngine()->register('php', function () {
             return new PhpEngine;
         });
     }
@@ -57,7 +56,7 @@ class Blade extends Factory
     protected function registerBladeResolver($extensions, $path)
     {
         $this->addExtension($extensions);
-        $this->getEngine()->register('blade', function() use ($path){
+        $this->getEngine()->register('blade', function () use ($path) {
             $Compiler = new BladeCompiler(new Filesystem, $path);
             return new CompilerEngine($Compiler);
         });
@@ -66,8 +65,7 @@ class Blade extends Factory
     public function addExtension($extensions, $engine = 'blade')
     {
         $extensions = is_array($extensions) ? $extensions : [$extensions];
-        foreach($extensions as $extension)
-        {
+        foreach ($extensions as $extension) {
             parent::addExtension($extension, $engine);
         }
     }
@@ -82,7 +80,7 @@ class Blade extends Factory
         return $this->engines;
     }
 
-    static public function render($template, array $data = [], array $merge = [])
+    public static function render($template, array $data = [], array $merge = [])
     {
         $VfsStreamDirectory = BladeVfs::getVfsStreamDirectory(uniqid('views-'));
 
