@@ -104,7 +104,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $Blade = new Laraport\Blade(__DIR__.'/path/to/views');
 
-$Blade->addExtension('foo.bar');
+$Blade->withExtension('foo.bar');
 
 $View = $Blade->make('custom', ['name' => 'Laravel']);
 
