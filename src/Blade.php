@@ -48,10 +48,7 @@ class Blade extends Factory
 
     protected function registerPhpResolver($extensions)
     {
-        $extensions = is_array($extensions) ? $extensions : [$extensions];
-        array_walk($extensions, function($extension){
-            $this->addExtension($extension, 'php');
-        });
+        $this->addExtension($extensions, 'php');
         $this->getEngine()->register('php', function(){
             return new PhpEngine;
         });
@@ -59,14 +56,20 @@ class Blade extends Factory
 
     protected function registerBladeResolver($extensions, $path)
     {
-        $extensions = is_array($extensions) ? $extensions : [$extensions];
-        array_walk($extensions, function($extension){
-            $this->addExtension($extension, 'blade');
-        });
+        $this->addExtension($extensions);
         $this->getEngine()->register('blade', function() use ($path){
             $Compiler = new BladeCompiler(new Filesystem, $path);
             return new CompilerEngine($Compiler);
         });
+    }
+
+    public function addExtension($extensions, $engine = 'blade')
+    {
+        $extensions = is_array($extensions) ? $extensions : [$extensions];
+        foreach($extensions as $extension)
+        {
+            parent::addExtension($extension, $engine);
+        }
     }
 
     public function setEngine(EngineResolver $Engine)
