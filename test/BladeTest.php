@@ -39,4 +39,11 @@ class BladeTest extends PHPUnit_Framework_TestCase
         $Template = $this->Blade->make('index', ['name' => 'Alice']);
         $this->assertEquals('Hello Alice!', (string) $Template);
     }
+
+    /** @test */
+    public function it_should_render_a_blade_php_view()
+    {
+        $Template = $this->Blade->make('sample', ['name' => 'Bob']);
+        $this->assertEquals('Hi Bob', (string) $Template);
+    }
 }
