@@ -10,19 +10,33 @@
  */
 
 use Laraport\Blade;
+use org\bovigo\vfs\vfsStream;
 
 class BladeTest extends PHPUnit_Framework_TestCase
 {
-    protected $defaultConfig;
+    protected $Blade;
 
     public function setUp()
     {
-        $this->defaultConfig = [];
+        vfsStream::setup('blade', null, array(
+            'cache' => [],
+            'views' => [
+                'index.php' => 'Hello <?php echo $name; ?>!',
+                'sample.blade.php' => 'Hi {{ $name }}',
+                'acme.foo.bar' => 'Hey {{ $name }}. Using foo.bar extension.',
+                'sub' => ['index.php' => 'Shared name: {{ shared }}']
+            ]
+        ));
+        $path2views = vfsStream::url('blade/views');
+        $path2cache = vfsStream::url('blade/cache');
+        $extensions = ['blade.php', 'foo.bar'];
+        $this->Blade = new Blade($path2views, $path2cache, $extensions);
     }
 
     /** @test */
-    public function it_works()
+    public function it_should_render_a_simple_php_view()
     {
-        $this->assertTrue(true);
+        $Template = $this->Blade->make('index', ['name' => 'Alice']);
+        $this->assertEquals('Hello Alice!', (string) $Template);
     }
 }
