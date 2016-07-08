@@ -32,7 +32,7 @@ class Blade extends Factory
 
         if(is_null($path2cache))
         {
-            $path2cache = $this->getVfsPath(uniqid('cache-'));
+            $path2cache = BladeVfs::getVfsPath(uniqid('cache-'));
         }
 
         $this->setDispatcher(new Dispatcher);
@@ -70,27 +70,6 @@ class Blade extends Factory
             $Compiler = new BladeCompiler(new Filesystem, $path);
             return new CompilerEngine($Compiler);
         });
-    }
-
-    protected function getVfsPath($path)
-    {
-        $VfsRootDirectory = vfsStreamWrapper::getRoot();
-        if(is_null($VfsRootDirectory))
-        {
-            vfsStreamWrapper::register();
-            $VfsDirectory = new vfsStreamDirectory($path);
-            $VfsRootDirectory = new vfsStreamDirectory(uniqid('blade-'));
-            $VfsRootDirectory->addChild($VfsDirectory);
-            vfsStreamWrapper::setRoot($VfsRootDirectory);
-        }
-        else
-        {
-            $VfsDirectory = new vfsStreamDirectory($path);
-            $VfsBladeDirectory = new vfsStreamDirectory(uniqid('blade-'));
-            $VfsBladeDirectory->addChild($VfsDirectory);
-            $VfsRootDirectory->addChild($VfsBladeDirectory);
-        }
-        return vfsStream::url($VfsDirectory->path());
     }
 
     public function setEngine(EngineResolver $Engine)
