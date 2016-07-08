@@ -12,13 +12,10 @@
 namespace Laraport;
 
 use Illuminate\View\Factory;
-use org\bovigo\vfs\vfsStream;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use Illuminate\View\FileViewFinder;
-use org\bovigo\vfs\vfsStreamWrapper;
 use Illuminate\Filesystem\Filesystem;
-use org\bovigo\vfs\vfsStreamDirectory;
 use Illuminate\View\Engines\PhpEngine;
 use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Engines\CompilerEngine;
