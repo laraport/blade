@@ -37,7 +37,7 @@ class Blade extends Factory
         $this->setDispatcher(new Dispatcher);
 
         $paths = is_array($path2views) ? $path2views : [$path2views];
-        $this->setFinder(new FileViewFinder(new Filesystem, $paths));// $extensions + ['php'])
+        $this->setFinder(new FileViewFinder(new Filesystem, $paths));
 
         $this->setContainer(new Container);
 
