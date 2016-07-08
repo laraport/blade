@@ -37,21 +37,21 @@ class BladeTest extends PHPUnit_Framework_TestCase
     public function it_should_render_a_simple_php_view()
     {
         $Template = $this->Blade->make('index', ['name' => 'Alice']);
-        $this->assertEquals('Hello Alice!', (string) $Template);
+        $this->assertEquals('Hello Alice!', $Template->render());
     }
 
     /** @test */
     public function it_should_render_a_blade_php_view()
     {
         $Template = $this->Blade->make('sample', ['name' => 'Bob']);
-        $this->assertEquals('Hi Bob', (string) $Template);
+        $this->assertEquals('Hi Bob', $Template->render());
     }
 
     /** @test */
     public function it_should_render_a_blade_php_view_as_a_custom_extension()
     {
         $Template = $this->Blade->make('acme', ['name' => 'Eve']);
-        $this->assertEquals('Hey Eve. Using foo.bar extension.', (string) $Template);
+        $this->assertEquals('Hey Eve. Using foo.bar extension.', $Template->render());
     }
 
     /** @test */
@@ -59,7 +59,7 @@ class BladeTest extends PHPUnit_Framework_TestCase
     {
         $this->Blade->share('shared', 'Acme');
         $Template = $this->Blade->make('sub.index');
-        $this->assertEquals('Shared name: Acme', (string) $Template);
+        $this->assertEquals('Shared name: Acme', $Template->render());
     }
 
     /** @test */
@@ -67,13 +67,13 @@ class BladeTest extends PHPUnit_Framework_TestCase
     {
         $Blade = new Blade(vfsStream::url('blade/views'));
         $Template = $Blade->make('sample', ['name' => 'Memory']);
-        $this->assertEquals('Hi Memory', (string) $Template);
+        $this->assertEquals('Hi Memory', $Template->render());
     }
 
     /** @test */
     public function it_should_allow_statically_rendering_raw_templates()
     {
         $Template = Blade::render('Welcome {{ $name }}', ['name' => 'Raw']);
-        $this->assertEquals('Welcome Raw', (string) $Template);
+        $this->assertEquals('Welcome Raw', $Template->render());
     }
 }
