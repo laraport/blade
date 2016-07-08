@@ -16,7 +16,9 @@ use org\bovigo\vfs\vfsStream;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use Illuminate\View\FileViewFinder;
+use org\bovigo\vfs\vfsStreamWrapper;
 use Illuminate\Filesystem\Filesystem;
+use org\bovigo\vfs\vfsStreamDirectory;
 use Illuminate\View\Engines\PhpEngine;
 use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Engines\CompilerEngine;
@@ -30,8 +32,7 @@ class Blade extends Factory
 
         if(is_null($path2cache))
         {
-            $vfsDirectory = vfsStream::newDirectory('blade/cache');
-            $path2cache = $vfsDirectory->url();
+            $path2cache = $this->getVfsPath(uniqid('cache-'));
         }
 
         $this->setDispatcher(new Dispatcher);
@@ -69,6 +70,27 @@ class Blade extends Factory
             $Compiler = new BladeCompiler(new Filesystem, $path);
             return new CompilerEngine($Compiler);
         });
+    }
+
+    protected function getVfsPath($path)
+    {
+        $VfsRootDirectory = vfsStreamWrapper::getRoot();
+        if(is_null($VfsRootDirectory))
+        {
+            vfsStreamWrapper::register();
+            $VfsDirectory = new vfsStreamDirectory($path);
+            $VfsRootDirectory = new vfsStreamDirectory(uniqid('blade-'));
+            $VfsRootDirectory->addChild($VfsDirectory);
+            vfsStreamWrapper::setRoot($VfsRootDirectory);
+        }
+        else
+        {
+            $VfsDirectory = new vfsStreamDirectory($path);
+            $VfsBladeDirectory = new vfsStreamDirectory(uniqid('blade-'));
+            $VfsBladeDirectory->addChild($VfsDirectory);
+            $VfsRootDirectory->addChild($VfsBladeDirectory);
+        }
+        return vfsStream::url($VfsDirectory->path());
     }
 
     public function setEngine(EngineResolver $Engine)
