@@ -61,4 +61,12 @@ class BladeTest extends PHPUnit_Framework_TestCase
         $Template = $this->Blade->make('sub.index');
         $this->assertEquals('Shared name: Acme', (string) $Template);
     }
+
+    /** @test */
+    public function it_should_allow_in_memory_cache()
+    {
+        $Blade = new Blade(vfsStream::url('blade/views'));
+        $Template = $Blade->make('sample', ['name' => 'Memory']);
+        $this->assertEquals('Hi Memory', (string) $Template);
+    }
 }

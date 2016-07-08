@@ -12,6 +12,7 @@
 namespace Laraport;
 
 use Illuminate\View\Factory;
+use org\bovigo\vfs\vfsStream;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use Illuminate\View\FileViewFinder;
@@ -23,9 +24,15 @@ use Illuminate\View\Compilers\BladeCompiler;
 
 class Blade extends Factory
 {
-    public function __construct($path2views, $path2cache, $extensions = 'blade.php')
+    public function __construct($path2views, $path2cache = null, $extensions = 'blade.php')
     {
         $this->extensions = [];
+
+        if(is_null($path2cache))
+        {
+            $vfsDirectory = vfsStream::newDirectory('blade/cache');
+            $path2cache = $vfsDirectory->url();
+        }
 
         $this->setDispatcher(new Dispatcher);
 

@@ -12,11 +12,11 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/view": "^4.2.17"
+        "illuminate/view": "^4.2.17",
+        "mikey179/vfsStream": "^1.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.*",
-        "mikey179/vfsStream": "^1.6"
+        "phpunit/phpunit": "4.*"
     },
     "autoload": {
         "psr-4": {
