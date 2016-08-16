@@ -43,6 +43,9 @@ class Blade extends Factory
         $this->registerPhpResolver('php');
 
         $this->registerBladeResolver($extensions, $path2cache);
+        
+        // Required for partial includes
+        $this->share('__env', $this);
     }
 
     protected function registerPhpResolver($extensions)
