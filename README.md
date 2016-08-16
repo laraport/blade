@@ -127,7 +127,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $Blade = new Laraport\Blade(__DIR__.'/path/to/views');
 
-$Blade::share('acme', 'baz');
+$Blade->share('acme', 'baz');
 
 $View = $Blade->make('foo');
 
